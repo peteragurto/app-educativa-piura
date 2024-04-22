@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "299466233606",
+    "project_id": "app-educativa-piura",
+    "storage_bucket": "app-educativa-piura.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299466233606:android:ecea98349412dc08eeb087",
+        "android_client_info": {
+          "package_name": "com.example.educapiura"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB03htKLroFPIV8xLjIMlDh-im5fdpcR18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

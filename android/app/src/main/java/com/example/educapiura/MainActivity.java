@@ -1,4 +1,4 @@
-package com.example.yachaywai;
+package com.example.educapiura;
 
 import io.flutter.embedding.android.FlutterActivity;
 
