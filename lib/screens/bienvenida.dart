@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:yachaywai/screens/iniciarsesion.dart';
 import 'package:yachaywai/screens/registrarse.dart';
-import 'package:yachaywai/theme/theme.dart';
-import 'package:yachaywai/ui/widgets/custom_scaffold.dart';
-import 'package:yachaywai/ui/widgets/welcome_button.dart';
+import 'package:yachaywai/src/presentation/theme/theme.dart';
+import 'package:yachaywai/src/presentation/widgets/custom_scaffold.dart';
+import 'package:yachaywai/src/presentation/widgets/welcome_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});

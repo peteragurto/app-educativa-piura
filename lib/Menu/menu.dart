@@ -8,7 +8,8 @@ import 'eventos.dart';
 import 'contenedor.dart';
 import 'citaspsicologicas.dart';
 import 'notificaciones.dart';
-String nombres= "VIVIANA";
+
+String nombres = "VIVIANA";
 String tituloAppBar = 'BIENVENIDA $nombres';
 
 class Menu extends StatefulWidget {
@@ -38,15 +39,14 @@ class _MenuState extends State<Menu> {
       container = NotificationsPage();
     }
     return Scaffold(
-
-      appBar:
-      AppBar(
+      appBar: AppBar(
         backgroundColor: Colors.deepOrangeAccent,
-        title: Text(tituloAppBar,
-            style: TextStyle(
+        title: Text(
+          tituloAppBar,
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
-              fontSize: 19,
+            fontSize: 19,
             shadows: [
               Shadow(
                 color: Colors.tealAccent,
@@ -94,7 +94,9 @@ class _MenuState extends State<Menu> {
               currentPage == DrawerSections.settings ? true : false),
           menuItem(6, "Notificaciones", Icons.notifications_outlined,
               currentPage == DrawerSections.notifications ? true : false),
-          SizedBox(height: 200,),
+          SizedBox(
+            height: 200,
+          ),
           menuItem(7, "Cerrar sesión", Icons.exit_to_app_rounded,
               currentPage == DrawerSections.salir ? true : false),
         ],
@@ -129,7 +131,8 @@ class _MenuState extends State<Menu> {
               tituloAppBar = 'NOTIFICACIONES';
             } else if (id == 7) {
               tituloAppBar = 'BIENVENIDA $nombres';
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomeScreen()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => WelcomeScreen()));
             }
           });
         },

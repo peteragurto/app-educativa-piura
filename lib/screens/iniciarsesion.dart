@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:yachaywai/screens/registrarse.dart';
 import '../Menu/menu.dart';
-import '/screens/registrarse.dart';
-import '../ui/widgets/custom_scaffold.dart';
+import '../src/presentation/widgets/custom_scaffold.dart';
 
-import '../theme/theme.dart';
+import '../src/presentation/theme/theme.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

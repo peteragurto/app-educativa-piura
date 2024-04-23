@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:yachaywai/screens/bienvenida.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:yachaywai/theme/theme.dart';
+import 'package:yachaywai/src/presentation/theme/theme.dart';
 import 'firebase_options.dart';
 
 void main() async {
