@@ -1,28 +1,27 @@
-import 'package:yachaywai/src/domain/entities/curso.dart';
-import 'package:yachaywai/src/domain/entities/docente.dart';
+import 'package:flutter/foundation.dart';
 
+@immutable
 class RecursoEducativo {
   final String id;
   final String nombre;
-  final String url; // URL del recurso en la nube
+  final String url; // URL del recurso en la nube(Firebase Storage)
   final DateTime fechaSubida;
-  final Docente subidoPor;
-  final Curso curso;
+  final String docenteId; //Id de documento de Docente
+  final String cursoId; //Id de documento de Curso
   final TipoRecurso tipo;
   final String descripcion; // Descripción del recurso
-  final String? etiquetas; // Etiquetas para facilitar la búsqueda
+  final String? etiquetas;
 
-  RecursoEducativo({
-    required this.id,
-    required this.nombre,
-    required this.url,
-    required this.fechaSubida,
-    required this.subidoPor,
-    required this.curso,
-    required this.tipo,
-    required this.descripcion,
-    this.etiquetas,
-  });
+  const RecursoEducativo(
+      {required this.id,
+      required this.nombre,
+      required this.url,
+      required this.fechaSubida,
+      required this.docenteId,
+      required this.cursoId,
+      required this.tipo,
+      required this.descripcion,
+      this.etiquetas}); // Etiquetas para facilitar la búsqueda
 }
 
 enum TipoRecurso {

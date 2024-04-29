@@ -1,21 +1,17 @@
-import 'package:yachaywai/src/domain/entities/curso.dart';
+import 'package:flutter/foundation.dart';
+import 'package:yachaywai/src/domain/entities/usuario.dart';
 
-class Docente {
-  final String id;
-  final String nombre;
-  final String email;
-  final String dni;
-  final String sexo;
-  final String fotoUrl; // URL de la foto del docente
-  final List<Curso> cursosAsignados;
+@immutable
+class Docente extends Usuario {
+  final List<String> cursosAsignadosIds;
 
-  Docente({
-    required this.id,
-    required this.nombre,
-    required this.email,
-    required this.dni,
-    required this.sexo,
-    required this.fotoUrl,
-    required this.cursosAsignados,
-  });
+  const Docente(
+      {required super.id,
+      required super.nombre,
+      required super.email,
+      required super.dni,
+      required super.sexo,
+      required super.rol,
+      super.fotoUrl,
+      required this.cursosAsignadosIds});
 }

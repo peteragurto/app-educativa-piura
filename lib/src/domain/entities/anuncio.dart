@@ -1,20 +1,20 @@
-import 'package:yachaywai/src/domain/entities/curso.dart';
-import 'package:yachaywai/src/domain/entities/docente.dart';
+import 'package:flutter/foundation.dart';
 
+@immutable
 class Anuncio {
   final String id;
   final String titulo;
   final String contenido;
   final DateTime fechaPublicacion;
-  final Docente publicadoPor; // Docente que publicó el anuncio
-  final Curso cursoRelacionado; // Curso al que está relacionado el anuncio
+  final String publicadoByDocenteId; // Docente que publicó el anuncio
+  final String cursoRelacionadoId; // Curso al que está relacionado el anuncio
 
-  Anuncio({
+  const Anuncio({
     required this.id,
     required this.titulo,
     required this.contenido,
     required this.fechaPublicacion,
-    required this.publicadoPor,
-    required this.cursoRelacionado,
+    required this.publicadoByDocenteId,
+    required this.cursoRelacionadoId,
   });
 }

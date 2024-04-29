@@ -1,26 +1,23 @@
-import 'package:yachaywai/src/domain/entities/alumno.dart';
-import 'package:yachaywai/src/domain/entities/anuncio.dart';
-import 'package:yachaywai/src/domain/entities/docente.dart';
-import 'package:yachaywai/src/domain/entities/recurso.dart';
+import 'package:flutter/foundation.dart';
 
+@immutable
 class Curso {
   final String id;
   final String nombre;
-  final Docente docente;
+  final String docenteId;
   final String grado; // Grado del curso (por ejemplo, 5to)
   final String nivel; // Nivel educativo del curso (por ejemplo, Secundaria)
-  final List<Alumno> alumnosInscritos;
-  final List<RecursoEducativo> recursos;
-  final List<Anuncio> anuncios;
+  final List<String> alumnosInscritosIds;
+  final List<String> recursosIds;
+  final List<String> anunciosIds;
 
-  Curso({
-    required this.id,
-    required this.nombre,
-    required this.docente,
-    required this.grado,
-    required this.nivel,
-    required this.alumnosInscritos,
-    required this.recursos,
-    required this.anuncios,
-  });
+  const Curso(
+      {required this.id,
+      required this.nombre,
+      required this.docenteId,
+      required this.grado,
+      required this.nivel,
+      required this.alumnosInscritosIds,
+      required this.recursosIds,
+      required this.anunciosIds});
 }
