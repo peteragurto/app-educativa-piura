@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:yachaywai/src/data/models/user_model.dart';
 
 @immutable
 class Usuario {
@@ -19,4 +20,14 @@ class Usuario {
     required this.rol,
     this.fotoUrl,
   });
+
+  factory Usuario.fromModel(UserModel model) => Usuario(
+        id: model.id,
+        nombre: model.nombre,
+        email: model.email,
+        dni: model.dni,
+        sexo: model.sexo,
+        rol: model.rol,
+        fotoUrl: model.fotoUrl,
+      );
 }
