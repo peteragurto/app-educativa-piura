@@ -27,11 +27,19 @@ class FireBaseAuthRepositoryImpl implements AuthRepository {
       );
       final user = userCredential.user;
       if (user == null) {
-        throw UserNotFoundAuthException();
+        throw InvalidCredentialsExceptions();
       }
       return await _getUserFromFirestore(user.uid);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-email' || e.code == 'invalid-credential') {
+        throw InvalidCredentialsExceptions();
+      } else if (e.code == 'user-not-found') {
+        throw UserNotFoundAuthException();
+      } else {
+        throw FirebaseAuthException(code: e.code);
+      }
     } catch (e) {
-      throw Exception('Error al iniciar sesión: $e');
+      throw GenericAuthException();
     }
   }
 
@@ -41,20 +49,31 @@ class FireBaseAuthRepositoryImpl implements AuthRepository {
     if (user == null) {
       throw UserNotAuthenticatedException();
     } else {
-      final userDoc =
-          await _firestore.collection(usersCollection).doc(user.id).get();
-      final userData = userDoc.data();
+      final uid = user.id;
+      try {
+        final userDoc =
+            await _firestore.collection(usersCollection).doc(uid).get();
+        final userData = userDoc.data();
 
-      if (userData == null) {
-        throw UserNotFoundAuthException();
+        if (userData == null) {
+          throw UserNotFoundAuthException();
+        }
+
+        final userRole = userData['rol'] ?? '';
+        if (userRole == 'alumno') {
+          return Alumno.fromModel(AlumnoModel.fromFirebase(userData, uid));
+        } else if (userRole == 'docente') {
+          return Docente.fromModel(DocenteModel.fromFirebase(userData, uid));
+        }
+        return Usuario.fromModel(UserModel.fromFirebase(userData, uid));
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
+          throw UserNotFoundAuthException();
+        }
+      } catch (e) {
+        throw GenericAuthException();
       }
 
-      final userRole = userData['rol'] ?? '';
-      if (userRole == 'alumno') {
-        return Alumno.fromModel(AlumnoModel.fromFirebase(userData, user.id));
-      } else if (userRole == 'docente') {
-        return Docente.fromModel(DocenteModel.fromFirebase(userData, user.id));
-      }
       return user;
     }
   }
@@ -63,7 +82,7 @@ class FireBaseAuthRepositoryImpl implements AuthRepository {
   Future<Usuario?> getCurrentUser() async {
     final currentUser = _auth.currentUser;
     if (currentUser == null) {
-      throw UserNotFoundAuthException();
+      return null;
     } else {
       return await _getUserFromFirestore(currentUser.uid);
     }
