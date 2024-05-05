@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:yachaywai/src/data/models/curso_model.dart';
 
 @immutable
 class Curso {
@@ -20,4 +21,15 @@ class Curso {
       required this.alumnosInscritosIds,
       required this.recursosIds,
       required this.anunciosIds});
+
+  factory Curso.fromModel(CursoModel model) => Curso(
+        id: model.id,
+        nombre: model.nombre,
+        docenteId: model.docenteId,
+        grado: model.grado,
+        nivel: model.nivel,
+        alumnosInscritosIds: model.alumnosInscritosIds,
+        recursosIds: model.recursosIds,
+        anunciosIds: model.anunciosIds,
+      );
 }
