@@ -33,6 +33,7 @@ const darkColorScheme = ColorScheme(
 );
 
 ThemeData lightMode = ThemeData(
+  fontFamily: 'Poppins',
   useMaterial3: true,
   brightness: Brightness.light,
   colorScheme: lightColorScheme,
