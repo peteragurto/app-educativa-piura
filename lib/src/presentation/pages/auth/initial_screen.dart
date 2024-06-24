@@ -41,7 +41,11 @@ class _InitialScreenState extends State<InitialScreen> {
         future: _checkAuth(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Color.fromARGB(255, 158, 91, 3),
+              )
+            );
           } else if (snapshot.connectionState == ConnectionState.done) {
             final isAuthenticated = snapshot.data;
             return isAuthenticated == true ? const MenuScreen() : const LoginScreen();

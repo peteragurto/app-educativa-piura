@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     SnackBar(
       content: Text(message),
       backgroundColor: Colors.red,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
     ),
   );
 }
@@ -147,7 +147,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 10.0),
                     Center(
                       child: _isLoading
-                          ? const CircularProgressIndicator()
+                          ? const CircularProgressIndicator(
+                            color: Color.fromARGB(255, 158, 91, 3),
+                          )
                           : CustomElevatedButton(
                               text: "Iniciar sesión",
                               onPressed: _logIn,

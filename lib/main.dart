@@ -14,14 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FlutterDownloader.initialize(debug: true);
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<LoginProvider>(
-        create: (context) => LoginProvider(LoginUseCase(FireBaseAuthRepositoryImpl()))
-      ),
-    ], 
-    child: const MyApp())
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -34,10 +27,17 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: lightMode,
-      home: const InitialScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<LoginProvider>(
+          create: (context) => LoginProvider(LoginUseCase(FireBaseAuthRepositoryImpl()))
+        ),
+      ], 
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: lightMode,
+        home: const InitialScreen(),
+      ),
     );
   }
 }
