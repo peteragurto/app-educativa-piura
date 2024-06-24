@@ -29,7 +29,7 @@ class FireBaseAuthRepositoryImpl implements AuthRepository {
       if (user == null) {
         throw InvalidCredentialsExceptions();
       }
-      return await _getUserFromFirestore(user.uid);
+      return await getUserFromFirestore(user.uid);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-email' || e.code == 'invalid-credential') {
         throw InvalidCredentialsExceptions();
@@ -84,7 +84,7 @@ class FireBaseAuthRepositoryImpl implements AuthRepository {
     if (currentUser == null) {
       return null;
     } else {
-      return await _getUserFromFirestore(currentUser.uid);
+      return await getUserFromFirestore(currentUser.uid);
     }
   }
 
@@ -98,7 +98,8 @@ class FireBaseAuthRepositoryImpl implements AuthRepository {
     await _auth.signOut();
   }
 
-  Future<Usuario> _getUserFromFirestore(String uid) async {
+  @override
+  Future<Usuario> getUserFromFirestore(String uid) async {
     final userDoc = await _firestore.collection(usersCollection).doc(uid).get();
     final userData = userDoc.data();
     if (userData == null) {

@@ -12,16 +12,36 @@ class LoginProvider extends ChangeNotifier {
   Usuario? _usuario;
   Usuario? get usuario => _usuario;
 
-  Future<void> logIn(String email, String password) async {
-    _isLoading = true;
+  Future<Usuario?> logIn(String email, String password) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      _usuario = await _loginUseCase(
+        email: email,
+        password: password,
+      );
+
+      _isLoading = false;
+      notifyListeners();
+      return _usuario;
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      rethrow;
+    }
+  }
+
+  Future<void> signOut() async {
+    await _loginUseCase.signOut();
+    _usuario = null;
     notifyListeners();
+  }
 
-    _usuario = await _loginUseCase(
-      email: email,
-      password: password,
-    );
-
-    _isLoading = false;
+  Future<void> setCurrentUser(String uid) async {
+    _usuario = await _loginUseCase.getUserFromFirestore(uid);
     notifyListeners();
   }
 }
+
+

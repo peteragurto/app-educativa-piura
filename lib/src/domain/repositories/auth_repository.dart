@@ -18,4 +18,6 @@ abstract class AuthRepository {
 
   // Recupera la información completa del usuario autenticado (Alumno o Docente)
   Future<Usuario> getAuthenticatedUserInfo();
+
+  Future<Usuario> getUserFromFirestore(String uid);
 }

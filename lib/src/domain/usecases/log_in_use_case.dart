@@ -23,4 +23,12 @@ class LoginUseCase {
       throw UserNotAuthenticatedException();
     }
   }
+
+  Future<void> signOut() async {
+    await authRepository.signOut();
+  }
+
+  Future<Usuario> getUserFromFirestore(String uid) {
+    return authRepository.getUserFromFirestore(uid);
+  }
 }

@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:yachaywai/src/presentation/pages/auth/login_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:yachaywai/src/data/repositories/firebase_auth_repository_impl.dart';
+import 'package:yachaywai/src/domain/usecases/log_in_use_case.dart';
+import 'package:yachaywai/src/presentation/pages/auth/initial_screen.dart';
+import 'package:yachaywai/src/presentation/providers/login_provider.dart';
 import 'package:yachaywai/src/presentation/theme/theme.dart';
 import 'firebase_options.dart';
 
@@ -10,7 +14,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FlutterDownloader.initialize(debug: true);
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<LoginProvider>(
+        create: (context) => LoginProvider(LoginUseCase(FireBaseAuthRepositoryImpl()))
+      ),
+    ], 
+    child: const MyApp())
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -26,7 +37,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightMode,
-      home: const LoginScreen(),
+      home: const InitialScreen(),
     );
   }
 }
