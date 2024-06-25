@@ -11,6 +11,30 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  Future<void> _signOut() async {
+    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    try {
+      await loginProvider.signOut();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    } catch (e) {
+      showSnackBar(context, "Error al cerrar sesión. Por favor intenta de nuevo.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
@@ -18,10 +42,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return SafeArea(
       child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Text("Perfil"),
+              const Text("Perfil"),
               const SizedBox(height: 20.0),
               if(usuario != null)
                 Column(
@@ -30,17 +54,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Text('Email: ${usuario.email}', style: const TextStyle(fontSize: 18.0)),
                     const SizedBox(height: 20.0),
                     ElevatedButton(
-                      onPressed: () async {
-                        await loginProvider.signOut();
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LoginScreen()),
-                        );
-                      },
-                      child: const Text('Cerrar sesión'),
+                      onPressed: _signOut,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 158, 91, 3),
                       ),
+                      child: const Text('Cerrar sesión'),
                     ),
                   ],
                 )
