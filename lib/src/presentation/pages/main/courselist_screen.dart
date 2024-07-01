@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yachaywai/src/domain/entities/usuario.dart';
 import 'package:yachaywai/src/presentation/pages/main/selectedcourse_screen.dart';
 import 'package:yachaywai/src/presentation/providers/curso_provider.dart';
 import 'package:yachaywai/src/presentation/providers/login_provider.dart';
@@ -69,7 +68,9 @@ class _CourseListScreenState extends State<CourseListScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SelectedCourseScreen(),
+                        builder: (context) => SelectedCourseScreen(
+                          cursoNombre: curso.nombre,
+                        ),
                       ),
                     );
                   },
