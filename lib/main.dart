@@ -3,9 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:yachaywai/src/data/repositories/curso_repository_impl.dart';
 import 'package:yachaywai/src/data/repositories/firebase_auth_repository_impl.dart';
+import 'package:yachaywai/src/domain/usecases/get_cursos_usecase.dart';
 import 'package:yachaywai/src/domain/usecases/log_in_use_case.dart';
 import 'package:yachaywai/src/presentation/pages/auth/initial_screen.dart';
+import 'package:yachaywai/src/presentation/providers/curso_provider.dart';
 import 'package:yachaywai/src/presentation/providers/login_provider.dart';
 import 'package:yachaywai/src/presentation/theme/theme.dart';
 import 'firebase_options.dart';
@@ -32,6 +35,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LoginProvider>(
           create: (context) => LoginProvider(LoginUseCase(FireBaseAuthRepositoryImpl()))
         ),
+        ChangeNotifierProvider<CursosProvider>(
+          create: (context) => CursosProvider(GetCursosAsignadosUseCase(FirebaseCursoRepositoryImpl())),
+        )
       ], 
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
