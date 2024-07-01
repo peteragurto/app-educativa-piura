@@ -105,7 +105,12 @@ class FireBaseAuthRepositoryImpl implements AuthRepository {
     if (userData == null) {
       throw UserNotFoundAuthException();
     }
-    final userModel = UserModel.fromFirebase(userData, uid);
-    return Usuario.fromModel(userModel);
+    final userRole = userData[rolField] ?? '';
+    if (userRole == alumnoRol) {
+      return Alumno.fromModel(AlumnoModel.fromFirebase(userData, uid));
+    } else if (userRole == docenteRol) {
+      return Docente.fromModel(DocenteModel.fromFirebase(userData, uid));
+    }
+    return Usuario.fromModel(UserModel.fromFirebase(userData, uid));
   }
 }
