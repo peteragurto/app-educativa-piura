@@ -8,7 +8,8 @@ class RecursoEducativo {
   final String url; // URL del recurso en la nube(Firebase Storage)
   final DateTime fechaSubida;
   final String docenteId; //Id de documento de Docente
-  final String cursoId; //Id de documento de Curso
+  final String cursoId;
+  final String numSesion; //Id de documento de Curso
   final TipoRecurso tipo;
   final String? descripcion; // Descripción del recurso
   final String? etiquetas;
@@ -22,7 +23,8 @@ class RecursoEducativo {
       required this.cursoId,
       required this.tipo,
       this.descripcion,
-      this.etiquetas});
+      this.etiquetas,
+      required this.numSesion});
 
   factory RecursoEducativo.fromModel(RecursoEducativoModel model) =>
       RecursoEducativo(
@@ -34,7 +36,8 @@ class RecursoEducativo {
         cursoId: model.cursoId,
         tipo: model.tipo,
         descripcion: model.descripcion,
-        etiquetas: model.etiquetas,
+        etiquetas: model.etiquetas, 
+        numSesion: '',
       );
 }
 

@@ -8,6 +8,7 @@ class RecursoEducativoModel {
   final DateTime fechaSubida;
   final String docenteId;
   final String cursoId;
+  final String numSesion;
   final TipoRecurso tipo;
   final String? descripcion;
   final String? etiquetas;
@@ -19,6 +20,7 @@ class RecursoEducativoModel {
     required this.fechaSubida,
     required this.docenteId,
     required this.cursoId,
+    required this.numSesion,
     required this.tipo,
     this.descripcion,
     this.etiquetas,
@@ -36,6 +38,7 @@ class RecursoEducativoModel {
         tipo: TipoRecurso.values
             .firstWhere((e) => e.toString() == 'TipoRecurso.${data['tipo']}'),
         descripcion: data['descripcion'] ?? '',
-        etiquetas: data['etiquetas'],
+        etiquetas: data['etiquetas'], 
+        numSesion: data['numSesion'] ?? '',
       );
 }
