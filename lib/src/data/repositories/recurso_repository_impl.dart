@@ -17,45 +17,34 @@ class FirebaseRecursoEducativoImpl implements RecursoEducativoRepository {
   @override
   Stream<List<RecursoEducativo>> obtenerRecursosPorCurso(String cursoId) {
     try {
-      final snapshots = _firestore
-          .collection('recursos')
-          .where('cursoId', isEqualTo: cursoId)
-          .snapshots();
+      final snapshots = _firestore.collection('recursos')
+        .where('cursoId', isEqualTo: cursoId)
+        .snapshots();
 
-      return snapshots.map((snapshot) => snapshot.docs
-          .map((doc) => RecursoEducativo.fromModel(
-              RecursoEducativoModel.fromFirebase(doc.data(), doc.id)))
-          .toList());
+      return snapshots.map((snapshot) {
+        return snapshot.docs.map((doc) {
+          return RecursoEducativo.fromModel(RecursoEducativoModel.fromFirebase(doc.data(), doc.id));
+        }).toList();
+      });
     } catch (e) {
-      // Manejo de errores
       throw Exception('Error al obtener recursos por curso: $e');
     }
   }
 
   @override
-  Stream<List<RecursoEducativo>> obtenerRecursosPorSesion(
-    String cursoId,
-    int numSesion,
-  ) {
+  Stream<List<RecursoEducativo>> obtenerRecursosPorSesion(String cursoId, int numSesion) {
     try {
-      final snapshots = _firestore
-          .collection('recursos')
-          .where('cursoId', isEqualTo: cursoId)
-          .where('sesion', isEqualTo: numSesion)
-          .snapshots();
+      final snapshots = _firestore.collection('recursos')
+        .where('cursoId', isEqualTo: cursoId)
+        .where('numSesion', isEqualTo: numSesion.toString())
+        .snapshots();
 
-      return snapshots.map((snapshot) => snapshot.docs
-          .map(
-            (doc) => RecursoEducativo.fromModel(
-              RecursoEducativoModel.fromFirebase(
-                doc.data(),
-                doc.id,
-              ),
-            ),
-          )
-          .toList());
+      return snapshots.map((snapshot) {
+        return snapshot.docs.map((doc) {
+          return RecursoEducativo.fromModel(RecursoEducativoModel.fromFirebase(doc.data(), doc.id));
+        }).toList();
+      });
     } catch (e) {
-      // Manejo de errores
       throw Exception('Error al obtener recursos por sesión: $e');
     }
   }
@@ -94,30 +83,66 @@ class FirebaseRecursoEducativoImpl implements RecursoEducativoRepository {
   @override
   Future<void> descargarRecurso(String recursoId) async {
     try {
-      // Obtener la referencia del archivo en Firebase Storage
-      final storageRef = _storage.ref().child('recursos/$recursoId');
+      // Obtener la referencia del documento en Firestore
+      final docSnapshot = await _firestore.collection('recursos').doc(recursoId).get();
+      if (!docSnapshot.exists) {
+        throw Exception('Recurso no encontrado en Firestore');
+      }
+      
+      // Obtener la URL y el nombre del archivo desde el documento
+      final data = docSnapshot.data()!;
+      final url = data['url'] as String?;
+      final nombre = data['nombre'] as String?;
 
-      // Obtener la URL del archivo
-      final downloadUrl = await storageRef.getDownloadURL();
+      if (url == null) {
+        throw Exception('URL no encontrada en el documento del recurso');
+      }
+
+      final downloadUrl = url.startsWith('gs://')
+        ? await _convertGsUrlToDownloadUrl(url)
+        : url;
+
+      if (nombre == null) {
+        throw Exception('Nombre del archivo no encontrado en el documento del recurso');
+      }
 
       // Obtener la ruta de la carpeta de documentos
       final documentsDirectory = await getApplicationDocumentsDirectory();
-      final downloadPath = '${documentsDirectory.path}/$recursoId';
+      final downloadPath = documentsDirectory.path;
 
       // Enviar la tarea de descarga a FlutterDownloader
       await FlutterDownloader.enqueue(
         url: downloadUrl,
         savedDir: downloadPath,
-        showNotification:
-            true, // muestra una notificación cuando la descarga se completa
-        openFileFromNotification:
-            true, // abre el archivo descargado cuando el usuario toca la notificación
+        fileName: nombre,
+        showNotification: true, // muestra una notificación cuando la descarga se completa
+        openFileFromNotification: true, // abre el archivo descargado cuando el usuario toca la notificación
+        saveInPublicStorage: true,
+        headers: {}
       );
     } catch (e) {
       // Manejo de errores
+      print('Error al descargar el recurso: $e');
       throw Exception('Error al descargar el recurso: $e');
     }
   }
+
+// Función para convertir una URL gs:// a una URL de descarga https://
+Future<String> _convertGsUrlToDownloadUrl(String gsUrl) async {
+  try {
+    // Firebase Storage no permite convertir directamente gs:// a https:// en el SDK del cliente,
+    // por lo que se asume que gsUrl se usa tal cual.
+    // Sin embargo, si se necesita convertir, se debe usar el SDK de Firebase Admin o la API de Firebase Storage para obtener la URL.
+    // Aquí se usa la URL directamente para simplificación.
+    final storageRef = FirebaseStorage.instance.refFromURL(gsUrl);
+    final downloadUrl = await storageRef.getDownloadURL();
+    return downloadUrl;
+  } catch (e) {
+    print('Error al convertir gs:// a URL de descarga: $e');
+    throw Exception('Error al convertir gs:// a URL de descarga: $e');
+  }
+}
+
 
   @override
   Future<void> eliminarRecurso(String recursoId) async {

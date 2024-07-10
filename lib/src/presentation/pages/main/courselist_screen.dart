@@ -56,6 +56,9 @@ class _CourseListScreenState extends State<CourseListScreen> {
             if (cursosProvider.cursos.isEmpty) {
               return const Center(child: Text('No tienes cursos asignados.'));
             }
+
+            final loginProvider = Provider.of<LoginProvider>(context);
+            final isStudent = loginProvider.usuario?.rol == 'alumno';
         
             return ListView.builder(
               itemCount: cursosProvider.cursos.length,
@@ -69,7 +72,9 @@ class _CourseListScreenState extends State<CourseListScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => SelectedCourseScreen(
-                          cursoNombre: curso.nombre,
+                          cursoNombre: curso.nombre, 
+                          isStudent: isStudent,
+                          cursoId: curso.id
                         ),
                       ),
                     );
