@@ -31,7 +31,8 @@ class _SelectedCourseScreenState extends State<SelectedCourseScreen> {
   @override
   void initState() {
     super.initState();
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
       String id = data[0];
       DownloadTaskStatus status = data[1];
@@ -43,7 +44,7 @@ class _SelectedCourseScreenState extends State<SelectedCourseScreen> {
       });
     });
 
-    FlutterDownloader.registerCallback(downloadCallback as DownloadCallback);
+    FlutterDownloader.registerCallback(downloadCallback, step: 1);
   }
 
   @override
@@ -53,9 +54,10 @@ class _SelectedCourseScreenState extends State<SelectedCourseScreen> {
   }
 
   @pragma('vm:entry-point')
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
-    final SendPort? send = IsolateNameServer.lookupPortByName('downloader_send_port');
-    send?.send([id, status, progress]);
+  static void downloadCallback(String id, int status, int progress) {
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    send?.send([id, DownloadTaskStatus.values[status], progress]);
   }
 
   Future<void> _handleDownload(String recursoId) async {
@@ -63,26 +65,27 @@ class _SelectedCourseScreenState extends State<SelectedCourseScreen> {
       _downloadProgress[recursoId] = 0;
     });
 
-  final status = await Permission.storage.request();
-  if (status.isGranted) {
-    final recursoProvider = Provider.of<RecursoProvider>(context, listen: false);
-    try {
-      await recursoProvider.descargarRecurso(recursoId);
+    final status = await Permission.storage.request();
+    if (status.isGranted) {
+      final recursoProvider =
+          Provider.of<RecursoProvider>(context, listen: false);
+      try {
+        await recursoProvider.descargarRecurso(recursoId);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Descarga iniciada')),
+        );
+      } catch (e) {
+        print('Error al descargar recurso: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al descargar recurso: $e')),
+        );
+      }
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Descarga iniciada')),
-      );
-    } catch (e) {
-      print('Error al descargar recurso: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al descargar recurso: $e')),
+        const SnackBar(content: Text('Permiso de almacenamiento requerido')),
       );
     }
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Permiso de almacenamiento requerido')),
-    );
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +130,9 @@ class _SelectedCourseScreenState extends State<SelectedCourseScreen> {
                       trailing: widget.isStudent
                           ? IconButton(
                               icon: _downloadProgress.containsKey(recurso.id)
-                                  ? CircularProgressIndicator(value: _downloadProgress[recurso.id]! / 100)
+                                  ? CircularProgressIndicator(
+                                      value:
+                                          _downloadProgress[recurso.id]! / 100)
                                   : Icon(Icons.download),
                               onPressed: () {
                                 _handleDownload(recurso.id);
